@@ -1,3 +1,8 @@
+package ru.ifmo.morozov.classes;
+
+import ru.ifmo.morozov.enums.CheckerType;
+import ru.ifmo.morozov.enums.Colour;
+
 /**
  * Created by vks on 2/22/15.
  */

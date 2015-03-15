@@ -1,3 +1,9 @@
+package ru.ifmo.morozov;
+
+import ru.ifmo.morozov.classes.*;
+import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.interfaces.Player;
+
 import javax.media.opengl.awt.GLCanvas;
 import java.awt.*;
 import java.awt.event.KeyEvent;

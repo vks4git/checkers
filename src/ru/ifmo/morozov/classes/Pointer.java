@@ -1,3 +1,5 @@
+package ru.ifmo.morozov.classes;
+
 /**
  * Created by vks on 3/4/15.
  */

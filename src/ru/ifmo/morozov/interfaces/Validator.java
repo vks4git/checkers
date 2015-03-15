@@ -1,3 +1,7 @@
+package ru.ifmo.morozov.interfaces;
+
+import ru.ifmo.morozov.enums.State;
+
 /**
  * Created by vks on 2/27/15.
  */

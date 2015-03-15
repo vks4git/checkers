@@ -1,3 +1,5 @@
+package ru.ifmo.morozov.enums;
+
 /**
  * Created by vks on 2/22/15.
  */

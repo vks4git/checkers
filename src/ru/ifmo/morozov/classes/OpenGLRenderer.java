@@ -1,3 +1,8 @@
+package ru.ifmo.morozov.classes;
+
+import ru.ifmo.morozov.classes.Field;
+import ru.ifmo.morozov.enums.Colour;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;

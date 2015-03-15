@@ -1,5 +1,8 @@
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLEventListener;
+package ru.ifmo.morozov.classes;
+
+import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.interfaces.Player;
+import ru.ifmo.morozov.interfaces.Validator;
 
 /**
  * Created by vks on 2/27/15.
@@ -16,7 +19,7 @@ public class Game {
         players[0].setDirection(1);
         players[1].setDirection(-1);
 
-        field = new Field(players[0], players[1]);
+        field = new Field(players[0].getColour(), players[1].getColour());
         validator = new Rules(field);
     }
 

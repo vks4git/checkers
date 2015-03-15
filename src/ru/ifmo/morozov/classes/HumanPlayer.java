@@ -1,6 +1,10 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+package ru.ifmo.morozov.classes;
+
+import ru.ifmo.morozov.classes.Field;
+import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.enums.State;
+import ru.ifmo.morozov.interfaces.Player;
+import ru.ifmo.morozov.interfaces.Validator;
 
 /**
  * Created by vks on 2/26/15.

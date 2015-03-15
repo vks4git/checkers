@@ -1,3 +1,10 @@
+package ru.ifmo.morozov.classes;
+
+import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.enums.State;
+import ru.ifmo.morozov.interfaces.Player;
+import ru.ifmo.morozov.interfaces.Validator;
+
 import java.util.Random;
 
 /**

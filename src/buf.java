@@ -1,3 +1,8 @@
+import ru.ifmo.morozov.classes.*;
+import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.interfaces.Player;
+import ru.ifmo.morozov.interfaces.Validator;
+
 /**
  * Created by vks on 3/5/15.
  */

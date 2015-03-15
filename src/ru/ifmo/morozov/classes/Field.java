@@ -1,5 +1,8 @@
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLEventListener;
+package ru.ifmo.morozov.classes;
+
+import ru.ifmo.morozov.enums.CheckerType;
+import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.interfaces.Player;
 
 /**
  * Created by vks on 2/22/15.
@@ -15,14 +18,9 @@ public class Field {
     private boolean keyboardEntry;
     private Player turn;
 
-    private Player player1;
-    private Player player2;
-
-    public Field(Player player1, Player player2) {
+    public Field(Colour colour1, Colour colour2) {
         matrix = new Checker[8][8];
         pointer = new Pointer();
-        this.player1 = player1;
-        this.player2 = player2;
         checked = false;
         checkCoords = new Pointer();
         setCoords = new Pointer();
@@ -34,7 +32,7 @@ public class Field {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 3; j++) {
                 if ((i + j) % 2 == 1) {
-                    matrix[i][j] = new Checker(player2.getColour(), CheckerType.Simple);
+                    matrix[i][j] = new Checker(colour2, CheckerType.Simple);
                 }
             }
         }
@@ -42,7 +40,7 @@ public class Field {
         for (int i = 0; i < 8; i++) {
             for (int j = 7; j > 4; j--) {
                 if ((i + j) % 2 == 1) {
-                    matrix[i][j] = new Checker(player1.getColour(), CheckerType.Simple);
+                    matrix[i][j] = new Checker(colour1, CheckerType.Simple);
                 }
             }
         }
