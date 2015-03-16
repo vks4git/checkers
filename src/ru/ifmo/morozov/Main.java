@@ -20,9 +20,6 @@ public class Main implements Runnable, KeyListener {
     private static boolean bQuit = false;
 
     private Field field;
-    private Player player1;
-    private Player player2;
-    private Game game;
     private GLCanvas canvas;
 
     public static void main(String[] args) {
@@ -32,9 +29,9 @@ public class Main implements Runnable, KeyListener {
     public void run() {
         Frame frame = new Frame("Checkers");
         canvas = new GLCanvas();
-        player1 = new HumanPlayer(Colour.White, "Дарт Херохито");
-        player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум");
-        game = new Game(player1, player2);
+        Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито", 1);
+        Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1);
+        Game game = new Game(player1, player2);
         field = game.getField();
         final OpenGLRenderer renderer = new OpenGLRenderer(game.getField());
         int size = frame.getExtendedState();

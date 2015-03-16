@@ -1,5 +1,6 @@
 package ru.ifmo.morozov.interfaces;
 
+import ru.ifmo.morozov.classes.Field;
 import ru.ifmo.morozov.enums.State;
 
 /**
@@ -7,7 +8,7 @@ import ru.ifmo.morozov.enums.State;
  */
 public interface Validator {
 
-    State isLegal(int X1, int Y1, int X2, int Y2);
+    State isLegal(Field field, int X1, int Y1, int X2, int Y2);
 
     boolean canMove(int x, int y);
 

@@ -14,10 +14,6 @@ public class Rules implements Validator {
 
     private Field field;
 
-    public Rules(Field field) {
-        this.field = field;
-    }
-
     private boolean canBeat(int x, int y) {
         int u;
         int v;
@@ -76,7 +72,8 @@ public class Rules implements Validator {
         return false;
     }
 
-    public State isLegal(int x1, int y1, int x2, int y2) {
+    public State isLegal(Field field, int x1, int y1, int x2, int y2) {
+        this.field = field;
         if ((x2 < 0) || (x2 > 7) || (y2 < 0) || (y2 > 7)) {
             return State.Illegal;
         }

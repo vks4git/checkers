@@ -2,7 +2,9 @@ package ru.ifmo.morozov.classes;
 
 import ru.ifmo.morozov.enums.CheckerType;
 import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.enums.State;
 import ru.ifmo.morozov.interfaces.Player;
+import ru.ifmo.morozov.interfaces.Validator;
 
 /**
  * Created by vks on 2/22/15.
@@ -17,8 +19,10 @@ public class Field {
     private Pointer setCoords;
     private boolean keyboardEntry;
     private Player turn;
+    private Validator validator;
+    private boolean finished;
 
-    public Field(Colour colour1, Colour colour2) {
+    public Field(Colour colour1, Colour colour2, Validator validator) {
         matrix = new Checker[8][8];
         pointer = new Pointer();
         checked = false;
@@ -44,7 +48,8 @@ public class Field {
                 }
             }
         }
-
+        this.validator = validator;
+        finished = false;
     }
 
 
@@ -63,13 +68,23 @@ public class Field {
         matrix[X][Y] = null;
     }
 
-    public void remove(int X, int Y) {
-        free(X, Y);
-    }
-
     public void move(int X1, int Y1, int X2, int Y2) {
-        matrix[X2][Y2] = matrix[X1][Y1];
-        free(X1, Y1);
+        finished = false;
+        State state = validator.isLegal(this, X1, Y1, X2, Y2);
+        if (state == State.Legal) {
+            matrix[X2][Y2] = matrix[X1][Y1];
+            free(X1, Y1);
+            finished = true;
+            if (Math.abs(X1 - X2) == 2) {
+                free((X1 + X2) / 2, (Y1 + Y2) / 2);
+            }
+        } else if (state == State.OneMoreMove) {
+            matrix[X2][Y2] = matrix[X1][Y1];
+            free(X1, Y1);
+            if (Math.abs(X1 - X2) == 2) {
+                free((X1 + X2) / 2, (Y1 + Y2) / 2);
+            }
+        }
     }
 
     public final Pointer getPointer() {
@@ -143,6 +158,14 @@ public class Field {
 
     public final Pointer getCheckCoords() {
         return checkCoords;
+    }
+
+    public boolean canMove(Player player) {
+        return true;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
 }

@@ -8,20 +8,14 @@ import ru.ifmo.morozov.enums.Colour;
  */
 public interface Player {
 
-    void move(Field field, Validator validator);
+    void move(Field field);
 
     Colour getColour();
-
-    boolean canMove(Field field, Validator validator);
-
-    boolean isVictorious();
-
-    void setStatus(boolean status);
 
     String getName();
 
     int getDirection();
 
-    void setDirection(int direction);
+    boolean keyboardEntry();
 
 }
