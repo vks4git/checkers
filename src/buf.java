@@ -3,6 +3,14 @@ import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
 import ru.ifmo.morozov.interfaces.Validator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Created by vks on 3/5/15.
  */
@@ -20,5 +28,7 @@ public class buf {
         System.out.println(field.isFree(6, 5));
         System.out.println(validator.isLegal(field, 4, 1, 5, 2));
         System.out.println(validator.canMove(1, 2));
+
+        System.out.println();
     }
 }

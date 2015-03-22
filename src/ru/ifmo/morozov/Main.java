@@ -33,7 +33,9 @@ public class Main implements Runnable, KeyListener {
         Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1);
         Game game = new Game(player1, player2);
         field = game.getField();
-        final OpenGLRenderer renderer = new OpenGLRenderer(game.getField());
+
+        String root = new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + "../../../" + "src/";
+        final OpenGLRenderer renderer = new OpenGLRenderer(game.getField(), root);
         int size = frame.getExtendedState();
 
         canvas.addGLEventListener(renderer);

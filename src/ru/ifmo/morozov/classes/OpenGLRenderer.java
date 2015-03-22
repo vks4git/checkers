@@ -19,8 +19,25 @@ public class OpenGLRenderer implements GLEventListener {
     private Field field;
     private float width;
 
-    public OpenGLRenderer(Field field) {
+    private Model board;
+    private Model checker;
+    private Texture whiteTex;
+    private Texture blackTex;
+    private Texture boardTex;
+
+    public OpenGLRenderer(Field field, String root) {
         this.field = field;
+        String boardFile = root + "mdl/model.board";
+        String checkerFile = root + "mdl/model.checker";
+        String blackTextureFile = root + "tex/texture.black";
+        String whiteTextureFile = root + "tex/texture.white";
+        String boardTextureFile = root + "tex/texture.board";
+
+        board = new Model(boardFile);
+        checker = new Model(checkerFile);
+        whiteTex = new Texture(whiteTextureFile);
+        blackTex = new Texture(blackTextureFile);
+        boardTex = new Texture(boardTextureFile);
     }
 
     public void display(GLAutoDrawable gLDrawable) {

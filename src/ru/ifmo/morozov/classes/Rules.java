@@ -81,12 +81,6 @@ public class Rules implements Validator {
             if (field.getMatrix()[x1][y1].getColour() != field.getTurn().getColour()) {
                 return State.Illegal;
             }
-            if ((field.getTurn().getDirection() > 0) && (y2 - y1 > 0)) {
-                return State.Illegal;
-            }
-            if ((field.getTurn().getDirection() < 0) && (y2 - y1 < 0)) {
-                return State.Illegal;
-            }
             if ((x2 - x1 == 0) || (y2 - y1 == 0)) {
                 return State.Illegal;
             }
@@ -103,6 +97,12 @@ public class Rules implements Validator {
 
 
             if (field.getMatrix()[x1][y1].getType() == CheckerType.Simple) {
+                if ((field.getTurn().getDirection() > 0) && (y2 - y1 > 0)) {
+                    return State.Illegal;
+                }
+                if ((field.getTurn().getDirection() < 0) && (y2 - y1 < 0)) {
+                    return State.Illegal;
+                }
                 if (Math.abs(y2 - y1) == 2) {
                     if (field.getMatrix()[(x1 + x2) / 2][(y1 + y2) / 2] == null) {
                         return State.Illegal;
