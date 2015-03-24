@@ -1,6 +1,7 @@
 package ru.ifmo.morozov;
 
 import ru.ifmo.morozov.classes.*;
+import ru.ifmo.morozov.command.*;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
 
@@ -21,6 +22,7 @@ public class Main implements Runnable, KeyListener {
 
     private Field field;
     private GLCanvas canvas;
+    private CommandDesk desk;
 
     public static void main(String[] args) {
         displayT.start();
@@ -60,6 +62,13 @@ public class Main implements Runnable, KeyListener {
         canvas.requestFocus();
         canvas.display();
 
+        desk = new CommandDesk(field, canvas);
+        desk.add(new PressLeftArrow());
+        desk.add(new PressRightArrow());
+        desk.add(new PressUpArrow());
+        desk.add(new PressDownArrow());
+        desk.add(new PressEnter());
+
         game.start();
 
     }
@@ -73,43 +82,23 @@ public class Main implements Runnable, KeyListener {
                 break;
             }
             case KeyEvent.VK_LEFT: {
-                if (field.getKeybdEntry()) {
-                    field.resetPointer(-1, 0);
-                    canvas.display();
-                }
+                desk.invoke(0);
                 break;
             }
             case KeyEvent.VK_RIGHT: {
-                if (field.getKeybdEntry()) {
-                    field.resetPointer(1, 0);
-                    canvas.display();
-                }
+                desk.invoke(1);
                 break;
             }
             case KeyEvent.VK_UP: {
-                if (field.getKeybdEntry()) {
-                    field.resetPointer(0, -1);
-                    canvas.display();
-
-                }
+                desk.invoke(2);
                 break;
             }
             case KeyEvent.VK_DOWN: {
-                if (field.getKeybdEntry()) {
-                    field.resetPointer(0, 1);
-                    canvas.display();
-                }
+                desk.invoke(3);
                 break;
             }
             case KeyEvent.VK_ENTER: {
-                if (field.getKeybdEntry()) {
-                    if (!field.isChecked()) {
-                        field.check();
-                    } else {
-                        field.uncheck();
-                    }
-                    canvas.display();
-                }
+                desk.invoke(4);
                 break;
             }
         }

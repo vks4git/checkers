@@ -2,6 +2,8 @@ package ru.ifmo.morozov.classes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +16,7 @@ public class Texture {
 
     private int width;
     private int height;
-    private byte image[][][];
+    private byte image[];
 
     public Texture(String path) {
         Path file = Paths.get(path);
@@ -27,16 +29,9 @@ public class Texture {
             height = stream.read();
             height += stream.read() << 8;
 
-            image = new byte[width][height][4];
+            image = new byte[width * height * 3];
 
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    image[i][j][0] = (byte) stream.read();
-                    image[i][j][1] = (byte) stream.read();
-                    image[i][j][2] = (byte) stream.read();
-                    image[i][j][3] = 0;
-                }
-            }
+            stream.read(image);
 
             stream.close();
 
@@ -45,8 +40,8 @@ public class Texture {
         }
     }
 
-    public byte [][][] getImage() {
-        return image;
+    final public Buffer getImage() {
+        return ByteBuffer.wrap(image);
     }
 
     public int getWidth() {

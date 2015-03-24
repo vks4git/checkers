@@ -25,6 +25,7 @@ public class OpenGLRenderer implements GLEventListener {
     private Texture blackTex;
     private Texture boardTex;
 
+
     public OpenGLRenderer(Field field, String root) {
         this.field = field;
         String boardFile = root + "mdl/model.board";
@@ -41,6 +42,7 @@ public class OpenGLRenderer implements GLEventListener {
     }
 
     public void display(GLAutoDrawable gLDrawable) {
+
         GL2 gl = gLDrawable.getGL().getGL2();
         GLUquadric disk = glu.gluNewQuadric();
         glu.gluQuadricDrawStyle(disk, GLU.GLU_FILL);
