@@ -9,6 +9,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
+import java.nio.IntBuffer;
 
 /**
  * Created by vks on 3/3/15.
@@ -18,12 +19,16 @@ public class OpenGLRenderer implements GLEventListener {
     private static final GLU glu = new GLU();
     private Field field;
     private float width;
+    private float ang = 0;
 
     private Model board;
     private Model checker;
     private Texture whiteTex;
     private Texture blackTex;
     private Texture boardTex;
+
+    private BufferedModel bufferedBoard;
+    private BufferedModel bufferedChecker;
 
 
     public OpenGLRenderer(Field field, String root) {
@@ -39,11 +44,42 @@ public class OpenGLRenderer implements GLEventListener {
         whiteTex = new Texture(whiteTextureFile);
         blackTex = new Texture(blackTextureFile);
         boardTex = new Texture(boardTextureFile);
+
+        bufferedBoard = new BufferedModel();
+        bufferedChecker = new BufferedModel();
+
     }
 
     public void display(GLAutoDrawable gLDrawable) {
 
         GL2 gl = gLDrawable.getGL().getGL2();
+/*
+        gl.glLoadIdentity();
+        gl.glTranslatef(0.0f, 0.0f, -1.5f);
+        gl.glRotatef(ang, 0, 1, 0);
+        ang += 0.5;
+
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+
+
+        gl.glColor3f(1, 1, 1);
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.vertexBuffer);
+        gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.normalBuffer);
+        gl.glNormalPointer(GL.GL_FLOAT, 0, 0);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.textureCoordBuffer);
+        gl.glTexCoordPointer(2, GL.GL_FLOAT, 0, 0);
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, bufferedBoard.indexBuffer);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, bufferedBoard.texture);
+
+
+        gl.glDrawElements(GL2.GL_TRIANGLES, board.getIndices(), GL2.GL_UNSIGNED_SHORT, 0);
+
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0); */
+
         GLUquadric disk = glu.gluNewQuadric();
         glu.gluQuadricDrawStyle(disk, GLU.GLU_FILL);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
@@ -164,6 +200,7 @@ public class OpenGLRenderer implements GLEventListener {
 
         glu.gluDeleteQuadric(disk);
 
+
     }
 
 
@@ -175,6 +212,56 @@ public class OpenGLRenderer implements GLEventListener {
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glEnable(GL2.GL_COLOR_MATERIAL);
+
+
+        int[] buffer = new int[4];
+        gl.glGenBuffers(4, buffer, 0);
+        bufferedBoard.vertexBuffer = buffer[0];
+        bufferedBoard.normalBuffer = buffer[1];
+        bufferedBoard.textureCoordBuffer = buffer[2];
+        bufferedBoard.indexBuffer = buffer[3];
+
+        gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+        gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.vertexBuffer);
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, board.getVertices() * 12, board.getVertexArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.normalBuffer);
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, board.getVertices() * 12, board.getNormalArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.textureCoordBuffer);
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, board.getVertices() * 8, board.getTextureCoordArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, bufferedBoard.indexBuffer);
+        gl.glBufferData(GL2.GL_ELEMENT_ARRAY_BUFFER, board.getIndices() * 6, board.getIndexArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+
+
+        int [] tId = new int[1];
+        gl.glGenTextures(1, tId, 0);
+        bufferedBoard.texture = tId[0];
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, bufferedBoard.texture);
+        gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, 3, boardTex.getWidth(),
+                boardTex.getHeight(), 0, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE,
+                boardTex.getImage());
+
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x,
@@ -191,8 +278,11 @@ public class OpenGLRenderer implements GLEventListener {
         gl.glLoadIdentity();
     }
 
-    public void dispose(GLAutoDrawable arg0) {
-
+    public void dispose(GLAutoDrawable glDrawable) {
+        GL2 gl = glDrawable.getGL().getGL2();
+        gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+        gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
     }
 
 }

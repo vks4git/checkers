@@ -1,3 +1,4 @@
+import com.sun.deploy.util.BufferUtil;
 import ru.ifmo.morozov.Main;
 import ru.ifmo.morozov.classes.*;
 import ru.ifmo.morozov.enums.Colour;
@@ -36,8 +37,10 @@ public class buf {
         String root = new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + "../../../" + "src/";
         Texture tex = new Texture(root + "tex/texture.black");
         Buffer buffer = tex.getImage();
-        System.out.println(buffer.array());
 
+
+        byte x = -1;
+        System.out.println(~x);
 
         System.out.println();
     }
