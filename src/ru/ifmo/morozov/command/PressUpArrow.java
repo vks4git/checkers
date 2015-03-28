@@ -3,7 +3,7 @@ package ru.ifmo.morozov.command;
 import ru.ifmo.morozov.classes.Field;
 import ru.ifmo.morozov.interfaces.Command;
 
-import javax.media.opengl.awt.GLCanvas;
+import com.jogamp.opengl.awt.GLCanvas;
 
 /**
  * Created by vks on 3/24/15.

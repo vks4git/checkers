@@ -4,8 +4,9 @@ import ru.ifmo.morozov.classes.*;
 import ru.ifmo.morozov.command.*;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
+import ru.ifmo.morozov.interfaces.Validator;
 
-import javax.media.opengl.awt.GLCanvas;
+import com.jogamp.opengl.awt.GLCanvas;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -31,8 +32,9 @@ public class Main implements Runnable, KeyListener {
     public void run() {
         Frame frame = new Frame("Checkers");
         canvas = new GLCanvas();
+        Validator rules = new Rules();
         Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито", 1);
-        Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1);
+        Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1, rules);
         Game game = new Game(player1, player2);
         field = game.getField();
 
