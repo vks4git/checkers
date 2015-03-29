@@ -28,7 +28,8 @@ public class OpenGLRenderer implements GLEventListener {
     private Texture boardTex;
 
     private BufferedModel bufferedBoard;
-    private BufferedModel bufferedChecker;
+    private BufferedModel bufferedWhiteChecker;
+    private BufferedModel bufferedBlackChecker;
 
 
     public OpenGLRenderer(Field field, String root) {
@@ -46,160 +47,53 @@ public class OpenGLRenderer implements GLEventListener {
         boardTex = new Texture(boardTextureFile);
 
         bufferedBoard = new BufferedModel();
-        bufferedChecker = new BufferedModel();
+        bufferedWhiteChecker = new BufferedModel();
+        bufferedBlackChecker = new BufferedModel();
 
     }
 
-    public void display(GLAutoDrawable gLDrawable) {
+    private void render(GLAutoDrawable drawable, BufferedModel model, int indices) {
+        GL2 gl = drawable.getGL().getGL2();
 
-        GL2 gl = gLDrawable.getGL().getGL2();
-/*
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, model.vertexBuffer);
+        gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, model.normalBuffer);
+        gl.glNormalPointer(GL.GL_FLOAT, 0, 0);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, model.textureCoordBuffer);
+        gl.glTexCoordPointer(2, GL.GL_FLOAT, 0, 0);
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, model.indexBuffer);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, model.texture);
+
+
+        gl.glDrawElements(GL2.GL_TRIANGLES, indices, GL2.GL_UNSIGNED_SHORT, 0);
+
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
+    }
+
+    public void display(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
+
         gl.glLoadIdentity();
         gl.glTranslatef(0.0f, 0.0f, -1.5f);
-        gl.glRotatef(ang, 0, 1, 0);
+        gl.glRotatef(-45, 1, 0, 0);
+        gl.glRotatef(180, 0, 0, 1);
+        gl.glRotatef(ang, 0, 0, 1);
         ang += 0.5;
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
 
-
         gl.glColor3f(1, 1, 1);
 
-        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.vertexBuffer);
-        gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
-        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.normalBuffer);
-        gl.glNormalPointer(GL.GL_FLOAT, 0, 0);
-        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.textureCoordBuffer);
-        gl.glTexCoordPointer(2, GL.GL_FLOAT, 0, 0);
-        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, bufferedBoard.indexBuffer);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, bufferedBoard.texture);
-
-
-        gl.glDrawElements(GL2.GL_TRIANGLES, board.getIndices(), GL2.GL_UNSIGNED_SHORT, 0);
-
-        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
-        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0); */
-
-        GLUquadric disk = glu.gluNewQuadric();
-        glu.gluQuadricDrawStyle(disk, GLU.GLU_FILL);
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
-        gl.glTranslatef(0.0f, 0.0f, -5.0f);
-
-        float x;
-        float y;
-
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                gl.glBegin(GL.GL_TRIANGLE_STRIP);
-
-                if ((i + j) % 2 == 0) {
-                    gl.glColor3f(0.914f, 0.835f, 0.588f);
-                } else {
-                    gl.glColor3f(0.549f, 0.325f, 0.094f);
-                }
-
-                x = ((float) (i - 4)) / 2;
-                y = ((float) (4 - j)) / 2;
-
-                gl.glVertex2f(x, y);
-                gl.glVertex2f(x, y - 0.5f);
-                gl.glVertex2f(x + 0.5f, y);
-                gl.glVertex2f(x + 0.5f, y - 0.5f);
-
-                gl.glEnd();
-
-                if (!(field.isChecked() && (i == field.getCheckCoords().x) && (j == field.getCheckCoords().y))) {
-
-                    if (field.getMatrix()[i][j] != null) {
-
-                        gl.glPushMatrix();
-                        gl.glTranslatef(x + 0.25f, y - 0.25f, 0f);
-
-                        if (field.getMatrix()[i][j].getColour() == Colour.Black) {
-                            gl.glColor3f(0f, 0f, 0f);
-                        } else {
-                            gl.glColor3f(1f, 1f, 1f);
-                        }
-
-                        glu.gluDisk(disk, 0, 0.2, 32, 1);
-                        gl.glPopMatrix();
-
-
-                    }
-                }
-            }
-        }
-
-        x = ((float) (field.getPointer().x - 4)) / 2;
-        y = ((float) (4 - field.getPointer().y)) / 2;
-
-        if (field.isChecked()) {
-            width = 0.05f;
-            gl.glPushMatrix();
-            gl.glTranslatef(x + 0.25f, y - 0.25f, 0f);
-
-            if (field.getColour() == Colour.Black) {
-                gl.glColor3f(0f, 0f, 0f);
-            } else {
-                gl.glColor3f(1f, 1f, 1f);
-            }
-
-            glu.gluDisk(disk, 0, 0.2, 32, 1);
-            gl.glPopMatrix();
-        } else {
-            width = 0.03f;
-        }
-
-        gl.glColor3f(1f, 0f, 0f);
-
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-
-        gl.glVertex2f(x + 0.5f, y);
-        gl.glVertex2f(x, y);
-        gl.glVertex2f(x + 0.5f, y - width);
-        gl.glVertex2f(x, y - width);
-
-        gl.glEnd();
-
-        x += 0.5f;
-
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-
-        gl.glVertex2f(x, y);
-        gl.glVertex2f(x, y - 0.5f);
-        gl.glVertex2f(x - width, y);
-        gl.glVertex2f(x - width, y - 0.5f);
-
-        gl.glEnd();
-
-        y -= (0.5f - width);
-        x -= 0.5f;
-
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-
-        gl.glVertex2f(x + 0.5f, y);
-        gl.glVertex2f(x, y);
-        gl.glVertex2f(x + 0.5f, y - width);
-        gl.glVertex2f(x, y - width);
-
-        gl.glEnd();
-
-        y += (0.5f - width);
-        x += width;
-
-        gl.glBegin(GL.GL_TRIANGLE_STRIP);
-
-        gl.glVertex2f(x, y);
-        gl.glVertex2f(x, y - 0.5f);
-        gl.glVertex2f(x - width, y);
-        gl.glVertex2f(x - width, y - 0.5f);
-
-        gl.glEnd();
-
-        glu.gluDeleteQuadric(disk);
-
+        render(drawable, bufferedBoard, board.getIndices() * 3);
+        gl.glPushMatrix();
+        gl.glRotatef(180, 1, 0, 0);
+        gl.glTranslatef(0, 0, -0.135f);
+        gl.glTranslatef(0.425f, -0.4f, 0);
+        render(drawable, bufferedWhiteChecker, checker.getIndices() * 3);
+        gl.glPopMatrix();
 
     }
 
@@ -218,6 +112,13 @@ public class OpenGLRenderer implements GLEventListener {
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL2.GL_COLOR_MATERIAL);
 
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+
+        gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+        gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+
+        /* Creating VBO vertex buffer for board and loading model and texture into VRAM */
 
         int[] buffer = new int[4];
         gl.glGenBuffers(4, buffer, 0);
@@ -225,10 +126,6 @@ public class OpenGLRenderer implements GLEventListener {
         bufferedBoard.normalBuffer = buffer[1];
         bufferedBoard.textureCoordBuffer = buffer[2];
         bufferedBoard.indexBuffer = buffer[3];
-
-        gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
-        gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
         gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedBoard.vertexBuffer);
         gl.glBufferData(GL2.GL_ARRAY_BUFFER, board.getVertices() * 12, board.getVertexArray(), GL2.GL_STATIC_DRAW);
@@ -246,9 +143,6 @@ public class OpenGLRenderer implements GLEventListener {
         gl.glBufferData(GL2.GL_ELEMENT_ARRAY_BUFFER, board.getIndices() * 6, board.getIndexArray(), GL2.GL_STATIC_DRAW);
         gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-
-
         int [] tId = new int[1];
         gl.glGenTextures(1, tId, 0);
         bufferedBoard.texture = tId[0];
@@ -256,12 +150,65 @@ public class OpenGLRenderer implements GLEventListener {
         gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, 3, boardTex.getWidth(),
                 boardTex.getHeight(), 0, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE,
                 boardTex.getImage());
-
         gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
-
         gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
 
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+        /* Creating buffer and loading white checker */
+
+        gl.glGenBuffers(4, buffer, 0);
+        bufferedWhiteChecker.vertexBuffer = buffer[0];
+        bufferedWhiteChecker.normalBuffer = buffer[1];
+        bufferedWhiteChecker.textureCoordBuffer = buffer[2];
+        bufferedWhiteChecker.indexBuffer = buffer[3];
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedWhiteChecker.vertexBuffer);
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, checker.getVertices() * 12, checker.getVertexArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedWhiteChecker.normalBuffer);
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, checker.getVertices() * 12, checker.getNormalArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, bufferedWhiteChecker.textureCoordBuffer);
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, checker.getVertices() * 8, checker.getTextureCoordArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, 0);
+
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, bufferedWhiteChecker.indexBuffer);
+        gl.glBufferData(GL2.GL_ELEMENT_ARRAY_BUFFER, checker.getIndices() * 6, checker.getIndexArray(), GL2.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+
+        gl.glGenTextures(1, tId, 0);
+        bufferedWhiteChecker.texture = tId[0];
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, bufferedWhiteChecker.texture);
+        gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, 3, whiteTex.getWidth(),
+                whiteTex.getHeight(), 0, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE,
+                whiteTex.getImage());
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+        /* Copying geometry from white checker and loading texture for black checker */
+
+        bufferedBlackChecker.indexBuffer = bufferedWhiteChecker.indexBuffer;
+        bufferedBlackChecker.vertexBuffer = bufferedWhiteChecker.vertexBuffer;
+        bufferedBlackChecker.normalBuffer = bufferedWhiteChecker.normalBuffer;
+        bufferedBlackChecker.textureCoordBuffer = bufferedWhiteChecker.textureCoordBuffer;
+
+        gl.glGenTextures(1, tId, 0);
+        bufferedBlackChecker.texture = tId[0];
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, bufferedBlackChecker.texture);
+        gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, 3, blackTex.getWidth(),
+                blackTex.getHeight(), 0, GL2.GL_RGB, GL2.GL_UNSIGNED_BYTE,
+                blackTex.getImage());
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
     }
 
     public void reshape(GLAutoDrawable gLDrawable, int x,

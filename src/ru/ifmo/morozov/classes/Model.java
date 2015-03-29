@@ -1,5 +1,6 @@
 package ru.ifmo.morozov.classes;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.Buffer;
@@ -15,10 +16,10 @@ import java.nio.file.Paths;
  */
 public class Model {
 
-    private float vertexArray[];
-    private float normalArray[];
-    private float textureCoordArray[];
-    private short indexArray[];
+    private FloatBuffer vertexArray;
+    private FloatBuffer normalArray;
+    private FloatBuffer textureCoordArray;
+    private ShortBuffer indexArray;
 
     private int vertices;
     private int indices;
@@ -27,92 +28,43 @@ public class Model {
         Path file = Paths.get(path);
         try {
             InputStream stream = Files.newInputStream(file);
-            vertices = stream.read();
-            vertices += stream.read() << 8;
+            DataInputStream reader= new DataInputStream(stream);
+            vertices = reader.readInt();
+            indices = reader.readInt();
 
-            indices = stream.read();
-            indices += stream.read() << 8;
+            vertexArray = FloatBuffer.allocate(vertices * 12);
+            normalArray = FloatBuffer.allocate(vertices * 12);
+            textureCoordArray = FloatBuffer.allocate(vertices * 8);
+            indexArray = ShortBuffer.allocate(indices * 6);
 
-            vertexArray = new float[vertices * 3];
-            normalArray = new float[vertices * 3];
-            textureCoordArray = new float[vertices * 2];
-            indexArray = new short[indices * 3];
 
-            byte[] buffer = new byte[vertices * 12];
-
-            stream.read(buffer, 0, vertices * 12);
             for (int i = 0; i < vertices * 3; i++) {
-                vertexArray[i] = Float.intBitsToFloat(getIntBits(buffer, i));
-
+                vertexArray.put(reader.readFloat());
             }
 
-            stream.read(buffer, 0, vertices * 12);
             for (int i = 0; i < vertices * 3; i++) {
-                normalArray[i] = Float.intBitsToFloat(getIntBits(buffer, i));
-                if (i % 3 != 0) {
-                    vertexArray[i] = -vertexArray[i];
-                }
+                normalArray.put(-reader.readFloat());
             }
-
-            buffer = new byte[vertices * 8];
-            stream.read(buffer, 0, vertices * 8);
 
             for (int i = 0; i < vertices * 2; i++) {
-                textureCoordArray[i] = Float.intBitsToFloat(getIntBits(buffer, i));
+                textureCoordArray.put(reader.readFloat());
             }
-
-            buffer = new byte[indices * 6];
-            stream.read(buffer, 0, indices * 6);
 
             for (int i = 0; i < indices * 3; i++) {
-                indexArray[i] = 0;
-                short tmp = buffer[2 * i];
-                if (tmp < 0) {
-                    tmp += 256;
-                }
-                indexArray[i] += tmp;
-
-                tmp = buffer[2 * i + 1];
-                if (tmp < 0) {
-                    tmp += 256;
-                }
-                indexArray[i] += tmp << 8;
+                indexArray.put(reader.readShort());
             }
 
-            stream.close();
+            vertexArray.rewind();
+            normalArray.rewind();
+            textureCoordArray.rewind();
+            indexArray.rewind();
 
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private int getIntBits(byte[] buffer, int index) {
-        int bits = 0;
-        int tmp = buffer[4 * index];
-        if (tmp < 0) {
-            tmp += 256;
-        }
-        bits += tmp;
-
-        tmp = buffer[4 * index + 1];
-        if (tmp < 0) {
-            tmp += 256;
-        }
-        bits += tmp << 8;
-
-        tmp = buffer[4 * index + 2];
-        if (tmp < 0) {
-            tmp += 256;
-        }
-        bits += tmp << 16;
-
-        tmp = buffer[4 * index + 3];
-        if (tmp < 0) {
-            tmp += 256;
-        }
-        bits += tmp << 24;
-        return bits;
-    }
 
     public int getVertices() {
         return vertices;
@@ -122,19 +74,19 @@ public class Model {
         return indices;
     }
 
-    final public Buffer getVertexArray() {
-        return FloatBuffer.wrap(vertexArray).rewind();
+    public Buffer getVertexArray() {
+        return vertexArray;
     }
 
-    final public Buffer getNormalArray() {
-        return FloatBuffer.wrap(normalArray).rewind();
+    public Buffer getNormalArray() {
+        return normalArray;
     }
 
-    final public Buffer getTextureCoordArray() {
-        return FloatBuffer.wrap(textureCoordArray).rewind();
+    public Buffer getTextureCoordArray() {
+        return textureCoordArray;
     }
 
-    final public Buffer getIndexArray() {
-        return ShortBuffer.wrap(indexArray).rewind();
+    public Buffer getIndexArray() {
+        return indexArray;
     }
 }

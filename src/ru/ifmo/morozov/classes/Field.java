@@ -15,10 +15,10 @@ public class Field {
     private Pointer pointer;
     private boolean checked;
     private Colour colour;
+    private Player turn;
     private Pointer checkCoords;
     private Pointer setCoords;
     private boolean keyboardEntry;
-    private Player turn;
     private Validator validator;
     private boolean finished;
 
@@ -137,8 +137,8 @@ public class Field {
         return keyboardEntry;
     }
 
-    public void setTurn(Player player) {
-        turn = player;
+    public void setTurn(Player colour) {
+        turn = colour;
     }
 
     public final Player getTurn() {

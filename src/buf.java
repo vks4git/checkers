@@ -34,7 +34,7 @@ public class buf {
         System.out.println(validator.isLegal(field, 4, 1, 5, 2));
         System.out.println(validator.canMove(1, 2));
 
-        String root = new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + "../../../" + "src/";
+        String root = System.getProperty("user.dir") + "/src/";
         Texture tex = new Texture(root + "tex/texture.black");
         Buffer buffer = tex.getImage();
 

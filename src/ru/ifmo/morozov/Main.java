@@ -38,7 +38,7 @@ public class Main implements Runnable, KeyListener {
         Game game = new Game(player1, player2);
         field = game.getField();
 
-        String root = new Main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + "../../../" + "src/";
+        String root = System.getProperty("user.dir") + "/src/";
         final OpenGLRenderer renderer = new OpenGLRenderer(game.getField(), root);
         int size = frame.getExtendedState();
 
