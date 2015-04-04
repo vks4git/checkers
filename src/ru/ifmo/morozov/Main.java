@@ -3,6 +3,7 @@ package ru.ifmo.morozov;
 import ru.ifmo.morozov.classes.*;
 import ru.ifmo.morozov.command.*;
 import ru.ifmo.morozov.enums.Colour;
+import ru.ifmo.morozov.interfaces.Command;
 import ru.ifmo.morozov.interfaces.Player;
 import ru.ifmo.morozov.interfaces.Validator;
 
@@ -12,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vks on 2/26/15.
@@ -64,12 +67,14 @@ public class Main implements Runnable, KeyListener {
         canvas.requestFocus();
         canvas.display();
 
-        desk = new CommandDesk(field, canvas);
-        desk.add(new PressLeftArrow());
-        desk.add(new PressRightArrow());
-        desk.add(new PressUpArrow());
-        desk.add(new PressDownArrow());
-        desk.add(new PressEnter());
+        List<Command> commands = new ArrayList<>();
+
+        commands.add(new PressLeftArrow());
+        commands.add(new PressRightArrow());
+        commands.add(new PressUpArrow());
+        commands.add(new PressDownArrow());
+        commands.add(new PressEnter());
+        desk = new CommandDesk(field, canvas, commands);
 
         game.start();
 
@@ -84,23 +89,23 @@ public class Main implements Runnable, KeyListener {
                 break;
             }
             case KeyEvent.VK_LEFT: {
-                desk.invoke(0);
+                desk.moveLeft();
                 break;
             }
             case KeyEvent.VK_RIGHT: {
-                desk.invoke(1);
+                desk.moveRight();
                 break;
             }
             case KeyEvent.VK_UP: {
-                desk.invoke(2);
+                desk.moveUp();
                 break;
             }
             case KeyEvent.VK_DOWN: {
-                desk.invoke(3);
+                desk.moveDown();
                 break;
             }
             case KeyEvent.VK_ENTER: {
-                desk.invoke(4);
+                desk.pressEnter();
                 break;
             }
         }

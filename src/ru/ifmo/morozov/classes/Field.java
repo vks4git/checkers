@@ -35,7 +35,7 @@ public class Field {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 3; j++) {
-                if ((i + j) % 2 == 1) {
+                if ((i + j) % 2 == 0) {
                     matrix[i][j] = new Checker(colour2, CheckerType.Simple);
                 }
             }
@@ -43,7 +43,7 @@ public class Field {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 7; j > 4; j--) {
-                if ((i + j) % 2 == 1) {
+                if ((i + j) % 2 == 0) {
                     matrix[i][j] = new Checker(colour1, CheckerType.Simple);
                 }
             }
