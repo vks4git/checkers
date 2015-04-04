@@ -9,4 +9,5 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public interface Command {
     void execute(Field field, GLCanvas canvas);
+    void undo(Field field, GLCanvas canvas);
 }

@@ -108,6 +108,10 @@ public class Main implements Runnable, KeyListener {
                 desk.pressEnter();
                 break;
             }
+            case KeyEvent.VK_SPACE: {
+                desk.undo();
+                break;
+            }
         }
     }
 

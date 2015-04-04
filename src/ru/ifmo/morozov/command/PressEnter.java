@@ -20,4 +20,8 @@ public class PressEnter implements Command {
             canvas.display();
         }
     }
+
+    public void undo(Field field, GLCanvas canvas) {
+        execute(field, canvas);
+    }
 }

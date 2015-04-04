@@ -17,4 +17,12 @@ public class PressUpArrow implements Command {
 
         }
     }
+
+    public void undo(Field field, GLCanvas canvas) {
+        if (field.getKeybdEntry()) {
+            field.resetPointer(0, 1);
+            canvas.display();
+
+        }
+    }
 }

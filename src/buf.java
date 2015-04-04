@@ -15,6 +15,8 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vks on 3/5/15.
@@ -41,6 +43,18 @@ public class buf {
 
         byte x = -1;
         System.out.println(~x);
+
+        List<Integer> list = new ArrayList<>();
+        list.add(5);
+        list.add(6);
+        list.add(7);
+
+        list.remove(0);
+        System.out.println(list.get(0));
+        list.remove(0);
+        System.out.println(list.get(0));
+        list.remove(0);
+        System.out.println(list.get(0));
 
         System.out.println();
     }
