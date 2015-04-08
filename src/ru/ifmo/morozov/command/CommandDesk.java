@@ -28,53 +28,58 @@ public class CommandDesk {
     }
 
     public void moveLeft() {
-        commands.get(0).execute(field, canvas);
-        currentLength++;
-        if (currentLength > queueLength) {
-            currentLength--;
-            queue.remove(0);
+        if (commands.get(0).execute(field, canvas)) {
+            currentLength++;
+            if (currentLength > queueLength) {
+                currentLength--;
+                queue.remove(0);
+            }
+            queue.add(commands.get(0));
         }
-        queue.add(commands.get(0));
     }
 
     public void moveRight() {
-        commands.get(1).execute(field, canvas);
-        currentLength++;
-        if (currentLength > queueLength) {
-            currentLength--;
-            queue.remove(0);
+        if (commands.get(1).execute(field, canvas)) {
+            currentLength++;
+            if (currentLength > queueLength) {
+                currentLength--;
+                queue.remove(0);
+            }
+            queue.add(commands.get(1));
         }
-        queue.add(commands.get(1));
     }
 
     public void moveUp() {
-        commands.get(2).execute(field, canvas);
-        currentLength++;
-        if (currentLength > queueLength) {
-            currentLength--;
-            queue.remove(0);
+        if (commands.get(2).execute(field, canvas)) {
+            currentLength++;
+            if (currentLength > queueLength) {
+                currentLength--;
+                queue.remove(0);
+            }
+            queue.add(commands.get(2));
         }
-        queue.add(commands.get(2));
     }
 
     public void moveDown() {
-        commands.get(3).execute(field, canvas);
-        currentLength++;
-        if (currentLength > queueLength) {
-            currentLength--;
-            queue.remove(0);
+        if (commands.get(3).execute(field, canvas)) {
+            currentLength++;
+            if (currentLength > queueLength) {
+                currentLength--;
+                queue.remove(0);
+            }
+            queue.add(commands.get(3));
         }
-        queue.add(commands.get(3));
     }
 
     public void pressEnter() {
-        commands.get(4).execute(field, canvas);
-        currentLength++;
-        if (currentLength > queueLength) {
-            currentLength--;
-            queue.remove(0);
+        if (commands.get(4).execute(field, canvas)) {
+            currentLength++;
+            if (currentLength > queueLength) {
+                currentLength--;
+                queue.remove(0);
+            }
+            queue.add(commands.get(4));
         }
-        queue.add(commands.get(4));
     }
 
     public void undo() {

@@ -19,7 +19,6 @@ public class Field {
     private Pointer checkCoords;
     private Pointer setCoords;
     private boolean keyboardEntry;
-    private Validator validator;
     private boolean finished;
 
     public Field(Colour colour1, Colour colour2, Validator validator) {
@@ -91,13 +90,18 @@ public class Field {
         return pointer;
     }
 
-    public void resetPointer(int x, int y) {
+    public boolean resetPointer(int x, int y) {
+        boolean legalX = false;
+        boolean legalY = false;
         if ((pointer.x + x < 8) && (pointer.x + x >= 0)) {
             pointer.x += x;
+            legalX = true;
         }
         if ((pointer.y + y < 8) && (pointer.y + y >= 0)) {
             pointer.y += y;
+            legalY = true;
         }
+        return legalX && legalY;
     }
 
     public boolean isChecked() {

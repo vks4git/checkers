@@ -8,6 +8,6 @@ import com.jogamp.opengl.awt.GLCanvas;
  * Created by vks on 3/24/15.
  */
 public interface Command {
-    void execute(Field field, GLCanvas canvas);
+    boolean execute(Field field, GLCanvas canvas);
     void undo(Field field, GLCanvas canvas);
 }

@@ -10,7 +10,7 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class PressEnter implements Command {
 
-    public void execute(Field field, GLCanvas canvas) {
+    public boolean execute(Field field, GLCanvas canvas) {
         if (field.getKeybdEntry()) {
             if (!field.isChecked()) {
                 field.check();
@@ -19,6 +19,7 @@ public class PressEnter implements Command {
             }
             canvas.display();
         }
+        return true;
     }
 
     public void undo(Field field, GLCanvas canvas) {

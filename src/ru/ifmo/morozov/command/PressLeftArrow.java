@@ -10,11 +10,13 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class PressLeftArrow implements Command {
 
-    public void execute(Field field, GLCanvas canvas) {
+    public boolean execute(Field field, GLCanvas canvas) {
+        boolean result = false;
         if (field.getKeybdEntry()) {
-            field.resetPointer(-1, 0);
+            result = field.resetPointer(-1, 0);
             canvas.display();
         }
+        return result;
     }
 
     public void undo(Field field, GLCanvas canvas) {
