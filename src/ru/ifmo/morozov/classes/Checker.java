@@ -24,5 +24,9 @@ public class Checker {
     public CheckerType getType() {
         return type;
     }
+
+    public void setType(CheckerType type) {
+        this.type = type;
+    }
 }
 

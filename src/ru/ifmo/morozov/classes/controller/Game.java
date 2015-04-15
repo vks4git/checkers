@@ -13,7 +13,7 @@ import ru.ifmo.morozov.interfaces.Validator;
 /**
  * Created by vks on 2/27/15.
  */
-public class Game implements Notifier{
+public class Game implements Notifier {
     private Player[] players;
     private Field field;
     private Pointer pointer;

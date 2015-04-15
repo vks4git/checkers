@@ -10,6 +10,7 @@ import ru.ifmo.morozov.enums.Colour;
 public class Field {
 
     private Checker matrix[][];
+    private int direction;
 
     public Field(Colour colour1, Colour colour2) {
         matrix = new Checker[8][8];
@@ -31,6 +32,9 @@ public class Field {
         }
     }
 
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
     public boolean isFree(int x, int y) {
         if ((x > 7) || (x < 0) || (y > 7) || (y < 0)) {
@@ -50,6 +54,16 @@ public class Field {
     public void move(int x1, int y1, int x2, int y2) {
         matrix[x2][y2] = matrix[x1][y1];
         free(x1, y1);
+        if (direction > 0) {
+            if (y2 == 7) {
+                matrix[x2][y2].setType(CheckerType.Queen);
+            }
+        }
+        if (direction < 0) {
+            if (y2 == 0) {
+                matrix[x2][y2].setType(CheckerType.Queen);
+            }
+        }
     }
 
 }
