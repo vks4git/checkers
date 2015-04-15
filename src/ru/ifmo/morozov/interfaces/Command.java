@@ -1,6 +1,6 @@
 package ru.ifmo.morozov.interfaces;
 
-import ru.ifmo.morozov.classes.Field;
+import ru.ifmo.morozov.classes.model.Pointer;
 
 import com.jogamp.opengl.awt.GLCanvas;
 
@@ -8,6 +8,6 @@ import com.jogamp.opengl.awt.GLCanvas;
  * Created by vks on 3/24/15.
  */
 public interface Command {
-    boolean execute(Field field, GLCanvas canvas);
-    void undo(Field field, GLCanvas canvas);
+    boolean execute(Pointer pointer, GLCanvas canvas);
+    void undo(Pointer pointer, GLCanvas canvas);
 }

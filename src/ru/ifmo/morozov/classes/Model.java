@@ -39,7 +39,11 @@ public class Model {
 
 
             for (int i = 0; i < vertices * 3; i++) {
-                vertexArray.put(reader.readFloat());
+                if (i % 3 != 2) {
+                    vertexArray.put(-reader.readFloat());
+                } else {
+                    vertexArray.put(reader.readFloat());
+                }
             }
 
             for (int i = 0; i < vertices * 3; i++) {

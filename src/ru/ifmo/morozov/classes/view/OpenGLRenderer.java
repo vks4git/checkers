@@ -1,5 +1,10 @@
-package ru.ifmo.morozov.classes;
+package ru.ifmo.morozov.classes.view;
 
+import ru.ifmo.morozov.classes.BufferedModel;
+import ru.ifmo.morozov.classes.model.Pointer;
+import ru.ifmo.morozov.classes.model.Field;
+import ru.ifmo.morozov.classes.Model;
+import ru.ifmo.morozov.classes.Texture;
 import ru.ifmo.morozov.enums.CheckerType;
 import ru.ifmo.morozov.enums.Colour;
 
@@ -18,8 +23,7 @@ public class OpenGLRenderer implements GLEventListener, Observer {
 
     private static final GLU glu = new GLU();
     private Field field;
-    private float width;
-    private float ang = 0;
+    private Pointer pointer;
 
     private Model board;
     private Model checker;
@@ -35,7 +39,7 @@ public class OpenGLRenderer implements GLEventListener, Observer {
     private BufferedModel bufferedSelector;
 
 
-    public OpenGLRenderer(Field field, String root) {
+    public OpenGLRenderer(Field field, Pointer pointer, String root) {
         this.field = field;
         String boardFile = root + "mdl/model.board";
         String checkerFile = root + "mdl/model.checker";
@@ -57,6 +61,8 @@ public class OpenGLRenderer implements GLEventListener, Observer {
         bufferedWhiteChecker = new BufferedModel();
         bufferedBlackChecker = new BufferedModel();
         bufferedSelector = new BufferedModel();
+
+        this.pointer = pointer;
 
     }
 
@@ -86,7 +92,6 @@ public class OpenGLRenderer implements GLEventListener, Observer {
         gl.glLoadIdentity();
         gl.glTranslatef(0.0f, 0.0f, -1.5f);
         gl.glRotatef(-45, 1, 0, 0);
-        gl.glRotatef(180, 0, 0, 1);
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
@@ -95,11 +100,21 @@ public class OpenGLRenderer implements GLEventListener, Observer {
 
 
         gl.glPushMatrix();
-        gl.glTranslatef(0.42f - (float) field.getPointer().x * 0.12f, -0.42f + (float) field.getPointer().y * 0.12f, 0f);
-        if (!field.isChecked()) {
-            gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_POINT);
+        gl.glTranslatef((float) pointer.getCurrentPosition().x * 0.12f - 0.42f, -0.42f + (float) pointer.getCurrentPosition().y * 0.12f, 0f);
+        if (!pointer.isChecked()) {
+            gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
         }
         render(drawable, bufferedSelector, selector.getIndices() * 3);
+        if (pointer.isChecked()) {
+                gl.glRotatef(180, 1, 0, 0);
+                gl.glTranslatef(0, 0, -0.135f);
+            gl.glTranslatef(-0.01f, -0.02f, 0);
+            if (pointer.getTurn() == Colour.Black) {
+                render(drawable, bufferedBlackChecker, checker.getIndices() * 3);
+            } else {
+                render(drawable, bufferedWhiteChecker, checker.getIndices() * 3);
+            }
+        }
         gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         gl.glPopMatrix();
 
@@ -113,10 +128,10 @@ public class OpenGLRenderer implements GLEventListener, Observer {
                     if (field.getMatrix()[i][j].getType() == CheckerType.Simple) {
                         gl.glRotatef(180, 1, 0, 0);
                     }
-                    gl.glTranslatef(-0.41f + (float) i * 0.12f, 0.44f - (float) j * 0.12f, -0.135f);
-                   /* if (field.isChecked() && (i == field.getPointer().x) && (j == field.getPointer().y)) {
-                        gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_POINT);
-                    } */
+                    gl.glTranslatef(-0.43f + (float) i * 0.12f, 0.40f - (float) j * 0.12f, -0.135f);
+                    if ((i == pointer.getCheckPosition().x) && (j == pointer.getCheckPosition().y) && (pointer.isChecked())) {
+                        gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                    }
                     if (field.getMatrix()[i][j].getColour() == Colour.White) {
                         render(drawable, bufferedWhiteChecker, checker.getIndices() * 3);
                     } else {

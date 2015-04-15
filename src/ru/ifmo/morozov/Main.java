@@ -1,6 +1,12 @@
 package ru.ifmo.morozov;
 
-import ru.ifmo.morozov.classes.*;
+import ru.ifmo.morozov.classes.controller.Game;
+import ru.ifmo.morozov.classes.controller.Rules;
+import ru.ifmo.morozov.classes.model.AIPlayer;
+import ru.ifmo.morozov.classes.model.Field;
+import ru.ifmo.morozov.classes.model.HumanPlayer;
+import ru.ifmo.morozov.classes.model.Pointer;
+import ru.ifmo.morozov.classes.view.OpenGLRenderer;
 import ru.ifmo.morozov.command.*;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Command;
@@ -25,6 +31,7 @@ public class Main implements Runnable, KeyListener {
     private static boolean bQuit = false;
 
     private Field field;
+    private Pointer pointer;
     private GLCanvas canvas;
     private CommandDesk desk;
 
@@ -40,9 +47,12 @@ public class Main implements Runnable, KeyListener {
         Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1, rules);
         Game game = new Game(player1, player2);
         field = game.getField();
+        pointer = game.getPointer();
+
+
 
         String root = System.getProperty("user.dir") + "/src/";
-        final OpenGLRenderer renderer = new OpenGLRenderer(game.getField(), root);
+        final OpenGLRenderer renderer = new OpenGLRenderer(game.getField(), game.getPointer(), root);
         int size = frame.getExtendedState();
 
         canvas.addGLEventListener(renderer);
@@ -74,7 +84,7 @@ public class Main implements Runnable, KeyListener {
         commands.add(new PressUpArrow());
         commands.add(new PressDownArrow());
         commands.add(new PressEnter());
-        desk = new CommandDesk(field, canvas, commands);
+        desk = new CommandDesk(pointer, canvas, commands);
 
         game.start();
 

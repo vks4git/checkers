@@ -1,20 +1,14 @@
-import com.sun.deploy.util.BufferUtil;
-import ru.ifmo.morozov.Main;
 import ru.ifmo.morozov.classes.*;
+import ru.ifmo.morozov.classes.controller.Game;
+import ru.ifmo.morozov.classes.controller.Rules;
+import ru.ifmo.morozov.classes.model.AIPlayer;
+import ru.ifmo.morozov.classes.model.Field;
+import ru.ifmo.morozov.classes.model.HumanPlayer;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
 import ru.ifmo.morozov.interfaces.Validator;
 
-import javax.xml.soap.Text;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +25,8 @@ public class buf {
         Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1, validator);
         Game game = new Game(player1, player2);
         Field field = game.getField();
-        field.setTurn(player1);
+
         System.out.println(field.isFree(6, 5));
-        System.out.println(validator.isLegal(field, 4, 1, 5, 2));
-        System.out.println(validator.canMove(1, 2));
 
         String root = System.getProperty("user.dir") + "/src/";
         Texture tex = new Texture(root + "tex/texture.black");

@@ -11,19 +11,10 @@ public class Checker {
     private Colour colour;
     private CheckerType type;
 
-    private float x;
-    private float y;
-    private float z;             //Координаты шашки в пространстве
-
-    private boolean active;
 
     public Checker(Colour colour, CheckerType type) {
         this.colour = colour;
         this.type = type;
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        active = true;
     }
 
     public Colour getColour() {
@@ -33,30 +24,5 @@ public class Checker {
     public CheckerType getType() {
         return type;
     }
-
-    public void setPosition(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getZ() {
-        return z;
-    }
-
-    public void setInactive() {
-        active = false;
-    }
-
-    public boolean status() {
-        return active;
-    }
 }
+

@@ -1,6 +1,8 @@
 package ru.ifmo.morozov.interfaces;
 
-import ru.ifmo.morozov.classes.Field;
+import ru.ifmo.morozov.classes.Coordinates;
+import ru.ifmo.morozov.classes.model.Field;
+import ru.ifmo.morozov.classes.model.Pointer;
 import ru.ifmo.morozov.enums.Colour;
 
 /**
@@ -8,7 +10,7 @@ import ru.ifmo.morozov.enums.Colour;
  */
 public interface Player {
 
-    void move(Field field);
+    Coordinates move(Field field, Pointer pointer);
 
     Colour getColour();
 

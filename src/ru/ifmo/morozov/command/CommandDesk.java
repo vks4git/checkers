@@ -1,6 +1,6 @@
 package ru.ifmo.morozov.command;
 
-import ru.ifmo.morozov.classes.Field;
+import ru.ifmo.morozov.classes.model.Pointer;
 import ru.ifmo.morozov.interfaces.Command;
 
 import com.jogamp.opengl.awt.GLCanvas;
@@ -12,7 +12,7 @@ import java.util.List;
  * Created by vks on 3/24/15.
  */
 public class CommandDesk {
-    private Field field;
+    private Pointer pointer;
     private GLCanvas canvas;
     private List<Command> commands;
     private List<Command> queue;
@@ -20,15 +20,15 @@ public class CommandDesk {
     private int currentLength = 0;
 
 
-    public CommandDesk(Field field, GLCanvas canvas, List<Command> commands) {
+    public CommandDesk(Pointer pointer, GLCanvas canvas, List<Command> commands) {
         this.commands = commands;
-        this.field = field;
         this.canvas = canvas;
+        this.pointer = pointer;
         queue = new ArrayList<>(queueLength + 1);
     }
 
     public void moveLeft() {
-        if (commands.get(0).execute(field, canvas)) {
+        if (commands.get(0).execute(pointer, canvas)) {
             currentLength++;
             if (currentLength > queueLength) {
                 currentLength--;
@@ -39,7 +39,7 @@ public class CommandDesk {
     }
 
     public void moveRight() {
-        if (commands.get(1).execute(field, canvas)) {
+        if (commands.get(1).execute(pointer, canvas)) {
             currentLength++;
             if (currentLength > queueLength) {
                 currentLength--;
@@ -50,7 +50,7 @@ public class CommandDesk {
     }
 
     public void moveUp() {
-        if (commands.get(2).execute(field, canvas)) {
+        if (commands.get(2).execute(pointer, canvas)) {
             currentLength++;
             if (currentLength > queueLength) {
                 currentLength--;
@@ -61,7 +61,7 @@ public class CommandDesk {
     }
 
     public void moveDown() {
-        if (commands.get(3).execute(field, canvas)) {
+        if (commands.get(3).execute(pointer, canvas)) {
             currentLength++;
             if (currentLength > queueLength) {
                 currentLength--;
@@ -72,7 +72,7 @@ public class CommandDesk {
     }
 
     public void pressEnter() {
-        if (commands.get(4).execute(field, canvas)) {
+        if (commands.get(4).execute(pointer, canvas)) {
             currentLength++;
             if (currentLength > queueLength) {
                 currentLength--;
@@ -85,7 +85,7 @@ public class CommandDesk {
     public void undo() {
         if (currentLength > 0) {
             currentLength--;
-            queue.get(currentLength).undo(field, canvas);
+            queue.get(currentLength).undo(pointer, canvas);
             queue.remove(currentLength);
         }
     }

@@ -1,6 +1,6 @@
 package ru.ifmo.morozov.command;
 
-import ru.ifmo.morozov.classes.Field;
+import ru.ifmo.morozov.classes.model.Pointer;
 import ru.ifmo.morozov.interfaces.Command;
 
 import com.jogamp.opengl.awt.GLCanvas;
@@ -10,18 +10,18 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class PressDownArrow implements Command {
 
-    public boolean execute(Field field, GLCanvas canvas) {
+    public boolean execute(Pointer pointer, GLCanvas canvas) {
         boolean result = false;
-        if (field.getKeybdEntry()) {
-            result = field.resetPointer(0, 1);
+        if (pointer.isUsed()) {
+            result = pointer.move(0, -1);
             canvas.display();
         }
         return result;
     }
 
-    public void undo(Field field, GLCanvas canvas) {
-        if (field.getKeybdEntry()) {
-            field.resetPointer(0, -1);
+    public void undo(Pointer pointer, GLCanvas canvas) {
+        if (pointer.isUsed()) {
+            pointer.move(0, 1);
             canvas.display();
         }
     }
