@@ -43,13 +43,13 @@ public class Field {
         return matrix;
     }
 
-    public void free(int X, int Y) {
-        matrix[X][Y] = null;
+    public void free(int x, int y) {
+        matrix[x][y] = null;
     }
 
-    public void move(int X1, int Y1, int X2, int Y2) {
-        matrix[X2][Y2] = matrix[X1][Y1];
-        free(X1, Y1);
+    public void move(int x1, int y1, int x2, int y2) {
+        matrix[x2][y2] = matrix[x1][y1];
+        free(x1, y1);
     }
 
 }

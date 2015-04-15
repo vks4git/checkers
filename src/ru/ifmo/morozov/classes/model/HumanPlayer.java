@@ -1,7 +1,6 @@
 package ru.ifmo.morozov.classes.model;
 
 import ru.ifmo.morozov.classes.Coordinates;
-import ru.ifmo.morozov.classes.model.Field;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
 
@@ -21,11 +20,19 @@ public class HumanPlayer implements Player {
     }
 
     public Coordinates move(Field field, Pointer pointer) {
+        while (!pointer.isCompleted()) {
+            try {
+                Thread.sleep(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         Coordinates result = new Coordinates();
         result.x1 = pointer.getCheckPosition().x;
         result.y1 = pointer.getCheckPosition().y;
         result.x2 = pointer.getReleasePosition().x;
         result.y2 = pointer.getReleasePosition().y;
+        pointer.reset();
         return result;
     }
 

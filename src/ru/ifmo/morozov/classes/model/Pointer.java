@@ -14,6 +14,7 @@ public class Pointer {
     private Checker[][] matrix;
     private boolean checked;
     private boolean usePointer;
+    private boolean completed;
     private Colour turn;
 
     public Pointer(Checker[][] matrix, int x, int y) {
@@ -24,6 +25,7 @@ public class Pointer {
         releasePosition = new R2Point();
         checked = false;
         usePointer = false;
+        completed = false;
         this.matrix = matrix;
     }
 
@@ -57,6 +59,7 @@ public class Pointer {
         if (!checked) {
             if ((matrix[currentPosition.x][currentPosition.y] != null) && (matrix[currentPosition.x][currentPosition.y].getColour() == turn)) {
                 checked = true;
+                completed = false;
                 checkPosition.x = currentPosition.x;
                 checkPosition.y = currentPosition.y;
             }
@@ -68,7 +71,16 @@ public class Pointer {
             checked = false;
             releasePosition.x = currentPosition.x;
             releasePosition.y = currentPosition.y;
+            completed = true;
         }
+    }
+
+    public void reset() {
+        completed = false;
+        checkPosition.x = 0;
+        checkPosition.y = 0;
+        releasePosition.x = 0;
+        releasePosition.y = 0;
     }
 
     public boolean isChecked() {
@@ -83,7 +95,7 @@ public class Pointer {
         usePointer = true;
     }
 
-    public void notUsePointer() {
+    public void doNotUsePointer() {
         usePointer = false;
     }
 
@@ -93,5 +105,9 @@ public class Pointer {
 
     public Colour getTurn() {
         return turn;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 }

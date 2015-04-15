@@ -52,7 +52,8 @@ public class Main implements Runnable, KeyListener {
 
 
         String root = System.getProperty("user.dir") + "/src/";
-        final OpenGLRenderer renderer = new OpenGLRenderer(game.getField(), game.getPointer(), root);
+        final OpenGLRenderer renderer = new OpenGLRenderer(field, pointer, canvas, root);
+        game.addListener(renderer);
         int size = frame.getExtendedState();
 
         canvas.addGLEventListener(renderer);
