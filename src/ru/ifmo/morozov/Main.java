@@ -1,5 +1,6 @@
 package ru.ifmo.morozov;
 
+import com.jogamp.opengl.awt.GLCanvas;
 import ru.ifmo.morozov.classes.controller.Game;
 import ru.ifmo.morozov.classes.controller.Rules;
 import ru.ifmo.morozov.classes.model.AIPlayer;
@@ -13,19 +14,15 @@ import ru.ifmo.morozov.interfaces.Command;
 import ru.ifmo.morozov.interfaces.Player;
 import ru.ifmo.morozov.interfaces.Validator;
 
-import com.jogamp.opengl.awt.GLCanvas;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by vks on 2/26/15.
  */
-public class Main implements Runnable, KeyListener {
+public class Main implements Runnable, KeyListener, MouseListener {
 
     private static Thread displayT = new Thread(new Main());
     private static boolean bQuit = false;
@@ -48,7 +45,6 @@ public class Main implements Runnable, KeyListener {
         Game game = new Game(player1, player2);
         field = game.getField();
         pointer = game.getPointer();
-
 
 
         String root = System.getProperty("user.dir") + "/src/";
@@ -130,6 +126,28 @@ public class Main implements Runnable, KeyListener {
     }
 
     public void keyTyped(KeyEvent e) {
+    }
+
+        /* Mouse control */
+
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    public void mouseReleased(MouseEvent e) {
+
     }
 
 }

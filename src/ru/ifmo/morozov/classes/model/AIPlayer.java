@@ -1,8 +1,6 @@
 package ru.ifmo.morozov.classes.model;
 
-import ru.ifmo.morozov.classes.Checker;
 import ru.ifmo.morozov.classes.Coordinates;
-import ru.ifmo.morozov.classes.model.Field;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.enums.State;
 import ru.ifmo.morozov.interfaces.Player;
@@ -29,13 +27,87 @@ public class AIPlayer implements Player {
     }
 
     public Coordinates move(Field field, Pointer pointer) {
-        Coordinates result = new Coordinates();
-        result.x1 = 0;
-        return result;
+        return getMoves(field).get(0);
     }
 
     public Colour getColour() {
         return colour;
+    }
+
+    private List<Coordinates> getMoves(Field field) {
+        int xOffs;
+        int yOffs;
+        Coordinates move = new Coordinates();
+        List<Coordinates> moves = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (!field.isFree(i, j)) {
+                    if (field.getMatrix()[i][j].getColour() == colour) {
+                        xOffs = 0;
+                        yOffs = 0;
+
+                        do {
+                            xOffs ++;
+                            yOffs ++;
+                            move.x1 = i;
+                            move.y1 = j;
+                            move.x2 = i + xOffs;
+                            move.y2 = j + yOffs;
+                            if (validator.isLegal(field, move, this) != State.Illegal) {
+                                moves.add(move);
+                                move = new Coordinates();
+                            }
+                        } while ((move.x2 < 8) && (move.y2 < 8));
+                        xOffs = 0;
+                        yOffs = 0;
+
+                        do {
+                            xOffs ++;
+                            yOffs --;
+                            move.x1 = i;
+                            move.y1 = j;
+                            move.x2 = i + xOffs;
+                            move.y2 = j + yOffs;
+                            if (validator.isLegal(field, move, this) != State.Illegal) {
+                                moves.add(move);
+                                move = new Coordinates();
+                            }
+                        } while ((move.x2 < 8) && (move.y2 >= 0));
+                        xOffs = 0;
+                        yOffs = 0;
+
+                        do {
+                            xOffs --;
+                            yOffs ++;
+                            move.x1 = i;
+                            move.y1 = j;
+                            move.x2 = i + xOffs;
+                            move.y2 = j + yOffs;
+                            if (validator.isLegal(field, move, this) != State.Illegal) {
+                                moves.add(move);
+                                move = new Coordinates();
+                            }
+                        } while ((move.x2 >= 0) && (move.y2 < 8));
+                        xOffs = 0;
+                        yOffs = 0;
+
+                        do {
+                            xOffs --;
+                            yOffs --;
+                            move.x1 = i;
+                            move.y1 = j;
+                            move.x2 = i + xOffs;
+                            move.y2 = j + yOffs;
+                            if (validator.isLegal(field, move, this) != State.Illegal) {
+                                moves.add(move);
+                                move = new Coordinates();
+                            }
+                        } while ((move.x2 >= 0) && (move.y2 >= 0));
+                    }
+                }
+            }
+        }
+        return moves;
     }
 
     public String getName() {

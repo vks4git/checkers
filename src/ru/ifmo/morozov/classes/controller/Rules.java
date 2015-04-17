@@ -12,6 +12,7 @@ import ru.ifmo.morozov.interfaces.Validator;
 /**
  * Created by vks on 2/27/15.
  */
+
 public class Rules implements Validator {
 
     private boolean canBeat(Checker checker, int direction, Field field, int x, int y) {
@@ -150,7 +151,13 @@ public class Rules implements Validator {
                 return State.Illegal;
             }
             if (Math.abs(y2 - y1) == 2) {
-                if (field.getMatrix()[(x1 + x2) / 2][(y1 + y2) / 2].getColour() == colour) {
+                int xMedium = (x1 + x2) / 2;
+                int yMedium = (y1 + y2) / 2;
+                if (!field.isFree(xMedium, yMedium)) {
+                    if (field.getMatrix()[xMedium][yMedium].getColour() == colour){
+                        return State.Illegal;
+                    }
+                } else {
                     return State.Illegal;
                 }
             }
@@ -165,6 +172,24 @@ public class Rules implements Validator {
         if (canBeat(checker, direction, field, x2, y2)) {
             return State.OneMoreMove;
         }
+        boolean beat = false;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!field.isFree(i, j)) {
+                    if (field.getMatrix()[i][j].getColour() == colour) {
+                        if (canBeat(field.getMatrix()[i][j], player.getDirection(), field, i, j)) {
+                            beat |= ((x1 == i) && (y1 == j) && Math.abs(x1 - x2) > 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (canBeat(checker, player.getDirection(), field, x1, y1) && !beat) {
+            return State.Illegal;
+        }
+
         return State.Legal;
     }
 

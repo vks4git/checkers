@@ -26,28 +26,18 @@ public class buf {
         Game game = new Game(player1, player2);
         Field field = game.getField();
 
-        System.out.println(field.isFree(6, 5));
+        Coordinates move = new Coordinates();
+        move.x1 = 2;
+        move.y1 = 2;
+        move.x2 = 3;
+        move.y2 = 3;
 
-        String root = System.getProperty("user.dir") + "/src/";
-        Texture tex = new Texture(root + "tex/texture.black");
-        Buffer buffer = tex.getImage();
+        System.out.println(validator.isLegal(field, move, player1));
 
-
-        byte x = -1;
-        System.out.println(~x);
-
-        List<Integer> list = new ArrayList<>();
-        list.add(5);
-        list.add(6);
-        list.add(7);
-
-        list.remove(0);
-        System.out.println(list.get(0));
-        list.remove(0);
-        System.out.println(list.get(0));
-        list.remove(0);
-        System.out.println(list.get(0));
-
-        System.out.println();
+        move.x1 = 6;
+        move.y1 = 6;
+        move.x2 = -1;
+        move.y2 = -1;
+        System.out.println(validator.isLegal(field, move, player2));
     }
 }
