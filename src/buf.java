@@ -1,16 +1,11 @@
 import ru.ifmo.morozov.classes.*;
-import ru.ifmo.morozov.classes.controller.Game;
-import ru.ifmo.morozov.classes.controller.Rules;
+import ru.ifmo.morozov.classes.model.Game;
+import ru.ifmo.morozov.classes.model.Rules;
 import ru.ifmo.morozov.classes.model.AIPlayer;
 import ru.ifmo.morozov.classes.model.Field;
 import ru.ifmo.morozov.classes.model.HumanPlayer;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
-import ru.ifmo.morozov.interfaces.Validator;
-
-import java.nio.Buffer;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by vks on 3/5/15.

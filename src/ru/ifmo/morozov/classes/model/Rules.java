@@ -1,4 +1,4 @@
-package ru.ifmo.morozov.classes.controller;
+package ru.ifmo.morozov.classes.model;
 
 import ru.ifmo.morozov.classes.Checker;
 import ru.ifmo.morozov.classes.Coordinates;
@@ -253,7 +253,7 @@ public class Rules implements Validator {
     }
 
     private boolean checkWhiteSimpleCheckerBeat(Checker[][] matrix, int x, int y, int direction) {
-        if ((x + 2 < 8) && (y + direction * 2 < 8)) {
+        if ((x + 2 < 8) && (y + direction * 2 < 8) && (y + direction * 2 > -1)) {
             if (matrix[x + 1][y + direction] != null) {
                 if (matrix[x + 1][y + direction].getColour() == Colour.Black) {
                     if (matrix[x + 2][y + direction * 2] == null) {
@@ -262,7 +262,7 @@ public class Rules implements Validator {
                 }
             }
         }
-        if ((x - 2 > -1) && (y + direction * 2 < 8)) {
+        if ((x - 2 > -1) && (y + direction * 2 < 8) && (y + direction * 2 > -1)) {
             if (matrix[x - 1][y + direction] != null) {
                 if (matrix[x - 1][y + direction].getColour() == Colour.Black) {
                     if (matrix[x - 2][y + direction * 2] == null) {
@@ -275,7 +275,7 @@ public class Rules implements Validator {
     }
 
     private boolean checkBlackSimpleCheckerBeat(Checker[][] matrix, int x, int y, int direction) {
-        if ((x + 2 < 8) && (y + direction * 2 < 8)) {
+        if ((x + 2 < 8) && (y + direction * 2 < 8) && (y + direction * 2 > -1)) {
             if (matrix[x + 1][y + direction] != null) {
                 if (matrix[x + 1][y + direction].getColour() == Colour.White) {
                     if (matrix[x + 2][y + direction * 2] == null) {
@@ -284,7 +284,7 @@ public class Rules implements Validator {
                 }
             }
         }
-        if ((x - 2 > -1) && (y + direction * 2 < 8)) {
+        if ((x - 2 > -1) && (y + direction * 2 < 8) && (y + direction * 2 > -1)) {
             if (matrix[x - 1][y + direction] != null) {
                 if (matrix[x - 1][y + direction].getColour() == Colour.White) {
                     if (matrix[x - 2][y + direction * 2] == null) {

@@ -1,8 +1,6 @@
-package ru.ifmo.morozov.classes.controller;
+package ru.ifmo.morozov.classes.model;
 
 import ru.ifmo.morozov.classes.Coordinates;
-import ru.ifmo.morozov.classes.model.Field;
-import ru.ifmo.morozov.classes.model.Pointer;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.enums.State;
 import ru.ifmo.morozov.interfaces.Listener;

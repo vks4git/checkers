@@ -1,8 +1,9 @@
-package ru.ifmo.morozov;
+package ru.ifmo.morozov.classes.controller;
 
 import com.jogamp.opengl.awt.GLCanvas;
-import ru.ifmo.morozov.classes.controller.Game;
-import ru.ifmo.morozov.classes.controller.Rules;
+import ru.ifmo.morozov.classes.view.GUI;
+import ru.ifmo.morozov.classes.model.Game;
+import ru.ifmo.morozov.classes.model.Rules;
 import ru.ifmo.morozov.classes.model.AIPlayer;
 import ru.ifmo.morozov.classes.model.Field;
 import ru.ifmo.morozov.classes.model.HumanPlayer;
@@ -14,8 +15,6 @@ import ru.ifmo.morozov.interfaces.Command;
 import ru.ifmo.morozov.interfaces.Player;
 import ru.ifmo.morozov.interfaces.Validator;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,57 +22,32 @@ import java.util.List;
 /**
  * Created by vks on 2/26/15.
  */
-public class Main implements Runnable, KeyListener, MouseListener {
+public class Controller implements KeyListener, MouseListener {
 
-    private static Thread displayT = new Thread(new Main());
-    private static boolean bQuit = false;
-
-    private Field field;
-    private Pointer pointer;
-    private GLCanvas canvas;
     private CommandDesk desk;
+    private Thread thread;
 
-    public static void main(String[] args) {
-        displayT.start();
+    public Controller(Thread thread) {
+        this.thread = thread;
     }
 
-    public void run() {
-        JFrame frame = new JFrame("Checkers");
-        canvas = new GLCanvas();
+    public void start() {
         Validator rules = new Rules();
         Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито", 1);
         Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1, rules);
         Game game = new Game(player1, player2);
-        field = game.getField();
-        pointer = game.getPointer();
-
+        Field field = game.getField();
+        Pointer pointer = game.getPointer();
+        GUI gui = new GUI();
+        GLCanvas canvas = gui.getCanvas();
 
         String root = System.getProperty("user.dir") + "/src/";
         final OpenGLRenderer renderer = new OpenGLRenderer(field, pointer, canvas, root);
         game.addListener(renderer);
-        int size = frame.getExtendedState();
 
         canvas.addGLEventListener(renderer);
-        frame.add(canvas);
-        frame.setUndecorated(true);
-        size |= Frame.MAXIMIZED_BOTH;
-        frame.setExtendedState(size);
         canvas.addKeyListener(this);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                bQuit = true;
-                canvas.removeGLEventListener(renderer);
-                canvas.destroy();
-                System.exit(0);
-            }
-        });
-
-        frame.setVisible(true);
-        canvas.requestFocus();
-        canvas.display();
+        canvas.addMouseListener(this);
 
         List<Command> commands = new ArrayList<>();
 
@@ -84,15 +58,17 @@ public class Main implements Runnable, KeyListener, MouseListener {
         commands.add(new PressEnter());
         desk = new CommandDesk(pointer, canvas, commands);
 
+        gui.display();
+
         System.out.println("The winner is " + game.start().getName());
+        System.exit(0);
 
     }
 
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE: {
-                displayT = null;
-                bQuit = true;
+                thread = null;
                 System.exit(0);
                 break;
             }
@@ -132,6 +108,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
         /* Mouse control */
 
     public void mouseClicked(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
 
     }
 
@@ -144,8 +122,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
+
     }
 
     public void mouseReleased(MouseEvent e) {
