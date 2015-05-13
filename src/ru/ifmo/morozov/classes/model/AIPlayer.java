@@ -39,70 +39,31 @@ public class AIPlayer implements Player {
         int yOffs;
         Coordinates move = new Coordinates();
         List<Coordinates> moves = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 if (!field.isFree(i, j)) {
                     if (field.getMatrix()[i][j].getColour() == colour) {
-                        xOffs = 0;
-                        yOffs = 0;
 
-                        do {
-                            xOffs ++;
-                            yOffs ++;
-                            move.x1 = i;
-                            move.y1 = j;
-                            move.x2 = i + xOffs;
-                            move.y2 = j + yOffs;
-                            if (validator.isLegal(field, move, this) != State.Illegal) {
-                                moves.add(move);
-                                move = new Coordinates();
-                            }
-                        } while ((move.x2 < 8) && (move.y2 < 8));
-                        xOffs = 0;
-                        yOffs = 0;
+                        for (int u = -1; u < 2; u += 2) {
+                            for (int v = -1; v < 2; v += 2) {
+                                xOffs = 0;
+                                yOffs = 0;
 
-                        do {
-                            xOffs ++;
-                            yOffs --;
-                            move.x1 = i;
-                            move.y1 = j;
-                            move.x2 = i + xOffs;
-                            move.y2 = j + yOffs;
-                            if (validator.isLegal(field, move, this) != State.Illegal) {
-                                moves.add(move);
-                                move = new Coordinates();
+                                do {
+                                    xOffs += u;
+                                    yOffs += v;
+                                    move.x1 = i;
+                                    move.y1 = j;
+                                    move.x2 = i + xOffs;
+                                    move.y2 = j + yOffs;
+                                    if (validator.isLegal(field, move, this) != State.Illegal) {
+                                        moves.add(move);
+                                        move = new Coordinates();
+                                    }
+                                }
+                                while ((move.x2 + xOffs < 8) && (move.y2 + yOffs < 8) && (move.x2 + xOffs > -1) && (move.y2 + yOffs > -1));
                             }
-                        } while ((move.x2 < 8) && (move.y2 >= 0));
-                        xOffs = 0;
-                        yOffs = 0;
-
-                        do {
-                            xOffs --;
-                            yOffs ++;
-                            move.x1 = i;
-                            move.y1 = j;
-                            move.x2 = i + xOffs;
-                            move.y2 = j + yOffs;
-                            if (validator.isLegal(field, move, this) != State.Illegal) {
-                                moves.add(move);
-                                move = new Coordinates();
-                            }
-                        } while ((move.x2 >= 0) && (move.y2 < 8));
-                        xOffs = 0;
-                        yOffs = 0;
-
-                        do {
-                            xOffs --;
-                            yOffs --;
-                            move.x1 = i;
-                            move.y1 = j;
-                            move.x2 = i + xOffs;
-                            move.y2 = j + yOffs;
-                            if (validator.isLegal(field, move, this) != State.Illegal) {
-                                moves.add(move);
-                                move = new Coordinates();
-                            }
-                        } while ((move.x2 >= 0) && (move.y2 >= 0));
+                        }
                     }
                 }
             }

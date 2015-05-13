@@ -51,23 +51,11 @@ public class Game implements Notifier {
                 do {
                     do {
                         move = players[i % 2].move(field, pointer);
-                        update();
                         state = rules.isLegal(field, move, players[i % 2]);
                     } while (state == State.Illegal);
 
                     field.move(move.x1, move.y1, move.x2, move.y2);
 
-                    if (Math.abs(move.x1 - move.x2) > 1) {
-                        int dirX = (move.x2 - move.x1) / Math.abs(move.x2 - move.x1);
-                        int dirY = (move.y2 - move.y1) / Math.abs(move.y2 - move.y1);
-                        int x = move.x1;
-                        int y = move.y1;
-                        for (int j = 0; j < Math.abs(move.x2 - move.x1); j++) {
-                            field.free(x, y);
-                            x += dirX;
-                            y += dirY;
-                        }
-                    }
                     update();
                 } while (state != State.Legal);
             } else {
@@ -75,7 +63,10 @@ public class Game implements Notifier {
             }
             i++;
             pointer.doNotUsePointer();
+
+
         } while (true);
+
     }
 
     public void addListener(Listener listener) {

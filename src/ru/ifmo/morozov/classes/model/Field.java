@@ -18,7 +18,7 @@ public class Field {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 3; j++) {
                 if ((i + j) % 2 == 0) {
-                    matrix[i][j] = new Checker(colour1, CheckerType.Simple);
+                    matrix[i][j] = new Checker(colour1, CheckerType.Queen);
                 }
             }
         }
@@ -53,7 +53,17 @@ public class Field {
 
     public void move(int x1, int y1, int x2, int y2) {
         matrix[x2][y2] = matrix[x1][y1];
-        free(x1, y1);
+
+        int dirX = (x2 - x1) / Math.abs(x2 - x1);
+        int dirY = (y2 - y1) / Math.abs(y2 - y1);
+        int x = x1;
+        int y = y1;
+        for (int j = 0; j < Math.abs(x2 - x1); j++) {
+            free(x, y);
+            x += dirX;
+            y += dirY;
+        }
+
         if (direction > 0) {
             if (y2 == 7) {
                 matrix[x2][y2].setType(CheckerType.Queen);

@@ -108,8 +108,10 @@ public class OpenGLRenderer implements GLEventListener, Listener {
         }
         render(drawable, bufferedSelector, selector.getIndices() * 3);
         if (pointer.isChecked()) {
-            gl.glRotatef(180, 1, 0, 0);
-            gl.glTranslatef(0, 0, -0.135f);
+            if (pointer.getType() == CheckerType.Simple) {
+                gl.glRotatef(180, 1, 0, 0);
+                gl.glTranslatef(0, 0, -0.135f);
+            }
             gl.glTranslatef(-0.01f, -0.02f, 0);
             if (pointer.getTurn() == Colour.Black) {
                 render(drawable, bufferedBlackChecker, checker.getIndices() * 3);
@@ -127,13 +129,15 @@ public class OpenGLRenderer implements GLEventListener, Listener {
             for (int j = 0; j < 8; j++) {
                 if (field.getMatrix()[i][j] != null) {
                     gl.glPushMatrix();
+                    gl.glTranslatef(- 0.43f + (float) i * 0.12f, - 0.40f + (float) j * 0.12f, 0);
+                    if ((i == pointer.getCheckPosition().x) && (j == pointer.getCheckPosition().y) && (pointer.isChecked())) {
+                        gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                    }
                     if (field.getMatrix()[i][j].getType() == CheckerType.Simple) {
                         gl.glRotatef(180, 1, 0, 0);
                         gl.glTranslatef(0, 0, -0.135f);
-                    }
-                    gl.glTranslatef(-0.43f + (float) i * 0.12f, 0.40f - (float) j * 0.12f, 0);
-                    if ((i == pointer.getCheckPosition().x) && (j == pointer.getCheckPosition().y) && (pointer.isChecked())) {
-                        gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                    } else {
+                        gl.glTranslatef(0, -0.038f, 0);
                     }
                     if (field.getMatrix()[i][j].getColour() == Colour.White) {
                         render(drawable, bufferedWhiteChecker, checker.getIndices() * 3);

@@ -2,6 +2,7 @@ package ru.ifmo.morozov.classes.model;
 
 import ru.ifmo.morozov.classes.Checker;
 import ru.ifmo.morozov.classes.R2Point;
+import ru.ifmo.morozov.enums.CheckerType;
 import ru.ifmo.morozov.enums.Colour;
 
 /**
@@ -16,6 +17,7 @@ public class Pointer {
     private boolean usePointer;
     private boolean completed;
     private Colour turn;
+    private CheckerType type;
 
     public Pointer(Checker[][] matrix, int x, int y) {
         currentPosition = new R2Point();
@@ -62,6 +64,7 @@ public class Pointer {
                 completed = false;
                 checkPosition.x = currentPosition.x;
                 checkPosition.y = currentPosition.y;
+                type = matrix[currentPosition.x][currentPosition.y].getType();
             }
         }
     }
@@ -105,6 +108,10 @@ public class Pointer {
 
     public Colour getTurn() {
         return turn;
+    }
+
+    public CheckerType getType() {
+        return type;
     }
 
     public boolean isCompleted() {

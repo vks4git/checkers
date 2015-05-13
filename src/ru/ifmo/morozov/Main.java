@@ -83,7 +83,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
         commands.add(new PressEnter());
         desk = new CommandDesk(pointer, canvas, commands);
 
-        game.start();
+        Player winner = game.start();
+        System.out.println("The winner is " + winner.getName());
 
     }
 
