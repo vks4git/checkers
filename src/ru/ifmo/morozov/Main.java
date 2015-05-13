@@ -14,6 +14,7 @@ import ru.ifmo.morozov.interfaces.Command;
 import ru.ifmo.morozov.interfaces.Player;
 import ru.ifmo.morozov.interfaces.Validator;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     public void run() {
-        Frame frame = new Frame("Checkers");
+        JFrame frame = new JFrame("Checkers");
         canvas = new GLCanvas();
         Validator rules = new Rules();
         Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито", 1);
@@ -83,8 +84,7 @@ public class Main implements Runnable, KeyListener, MouseListener {
         commands.add(new PressEnter());
         desk = new CommandDesk(pointer, canvas, commands);
 
-        Player winner = game.start();
-        System.out.println("The winner is " + winner.getName());
+        System.out.println("The winner is " + game.start().getName());
 
     }
 
@@ -144,7 +144,8 @@ public class Main implements Runnable, KeyListener, MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-
+        int x = e.getX();
+        int y = e.getY();
     }
 
     public void mouseReleased(MouseEvent e) {

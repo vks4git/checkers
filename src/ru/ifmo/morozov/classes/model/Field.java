@@ -18,7 +18,7 @@ public class Field {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 3; j++) {
                 if ((i + j) % 2 == 0) {
-                    matrix[i][j] = new Checker(colour1, CheckerType.Queen);
+                    matrix[i][j] = new Checker(colour1, CheckerType.Simple);
                 }
             }
         }
