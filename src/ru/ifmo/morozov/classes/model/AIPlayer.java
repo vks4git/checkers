@@ -11,7 +11,6 @@ import ru.ifmo.morozov.interfaces.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -41,71 +40,48 @@ public class AIPlayer implements Player {
     * Превращение шашки в дамку -- 4.
     * Взятие соперником шашки -- -1.
     * Потеря дамки -- -5.
-    * Превращение шашки соперника в дамку -- -6.
+    * Превращение шашки соперника в дамку -- -4.
      */
 
-    private int evaluate(Checker[][] field, MoveSequence sequence, Colour colour) {
+    private int evaluate(Checker[][] field, MoveSequence sequence) {
         int position = 0;
         Checker[][] matrix = cloneMatrix(field);
         for (Coordinates move : sequence) {
             Checker checker = matrix[move.x1][move.y1];
             if (validator.isBeating(matrix, move, checker.getColour())) {
-                int dirX = (move.x2 - move.x1) / Math.abs(move.x2 - move.x1);
-                int dirY = (move.y2 - move.y1) / Math.abs(move.y2 - move.y1);
+                int length = Math.abs(move.x2 - move.x1);
+                int dirX = (move.x2 - move.x1) / length;
+                int dirY = (move.y2 - move.y1) / length;
                 int p = move.x1;
                 int q = move.y1;
-                for (int j = 0; j < Math.abs(move.x2 - move.x1); j++) {
+                for (int j = 1; j < length; j++) {
+                    p += dirX;
+                    q += dirY;
                     if (matrix[p][q] != null) {
                         checker = matrix[p][q];
                     }
-                    p += dirX;
-                    q += dirY;
                 }
-                if (checker.getColour() != colour) {
-                    if (checker.getType() == CheckerType.Simple) {
-                        position++;
-                    } else {
-                        position += 5;
-                    }
+                if (checker.getType() == CheckerType.Simple) {
+                    position++;
                 } else {
-                    if (checker.getType() == CheckerType.Simple) {
-                        position--;
-                    } else {
-                        position -= 5;
-                    }
+                    position += 5;
                 }
             }
             checker = matrix[move.x1][move.y1];
-            if (checker.getColour() == colour) {
-                if (checker.getDirection() == 1) {
-                    if (move.y2 == 7) {
-                        if (checker.getType() == CheckerType.Simple) {
-                            position += 4;
-                        }
-                    }
-                } else {
-                    if (move.y2 == 0) {
-                        if (checker.getType() == CheckerType.Simple) {
-                            position += 4;
-                        }
+            if (checker.getDirection() == 1) {
+                if (move.y2 == 7) {
+                    if (checker.getType() == CheckerType.Simple) {
+                        position += 4;
                     }
                 }
             } else {
-                if (checker.getDirection() == 1) {
-                    if (move.y2 == 7) {
-                        if (checker.getType() == CheckerType.Simple) {
-                            position -= 6;
-                        }
-                    }
-                } else {
-                    if (move.y2 == 0) {
-                        if (checker.getType() == CheckerType.Simple) {
-                            position -= 6;
-                        }
+                if (move.y2 == 0) {
+                    if (checker.getType() == CheckerType.Simple) {
+                        position += 4;
                     }
                 }
             }
-            move(matrix, move);
+            matrix = move(matrix, move);
         }
         return position;
     }
@@ -117,16 +93,17 @@ public class AIPlayer implements Player {
         result[1] = 0;
         int i = 0;
         for (MoveSequence sequence : moves) {
-            int position = evaluate(matrix, sequence, colours[depth % 2]);
+            int position = evaluate(matrix, sequence);
             if (depth < recursionDepth) {
                 Checker[][] field = cloneMatrix(matrix);
                 for (Coordinates move : sequence) {
-                    move(field, move);
+                    field = move(field, move);
                 }
+                int mark = minimax(getMoves(field, colours[(depth + 1) % 2]), field, depth + 1)[0];
                 if (depth % 2 == 0) {
-                    position -= minimax(getMoves(field, colours[(depth + 1) % 2]), field, depth + 1)[0];
+                    position -= mark;
                 } else {
-                    position += minimax(getMoves(field, colours[(depth + 1) % 2]), field, depth + 1)[0];
+                    position += mark;
                 }
             }
             if (position > result[0]) {

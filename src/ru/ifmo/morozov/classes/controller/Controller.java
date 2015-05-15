@@ -34,6 +34,7 @@ public class Controller implements KeyListener, MouseListener {
     public void start() {
         Validator rules = new Rules();
         Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито");
+        //Player player1 = new AIPlayer(Colour.White, "The Chosen One", rules);
         Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", rules);
         Game game = new Game(player1, player2);
         Field field = game.getField();
