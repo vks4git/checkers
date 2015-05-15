@@ -1,6 +1,7 @@
 package ru.ifmo.morozov.interfaces;
 
-import ru.ifmo.morozov.classes.Coordinates;
+import ru.ifmo.morozov.classes.Checker;
+import ru.ifmo.morozov.classes.MoveSequence;
 import ru.ifmo.morozov.classes.model.Field;
 import ru.ifmo.morozov.classes.model.Pointer;
 import ru.ifmo.morozov.enums.Colour;
@@ -10,13 +11,11 @@ import ru.ifmo.morozov.enums.Colour;
  */
 public interface Player {
 
-    Coordinates move(Field field, Pointer pointer);
+    MoveSequence move(Checker [][] matrix, Pointer pointer);
 
     Colour getColour();
 
     String getName();
-
-    int getDirection();
 
     boolean keyboardEntry();
 

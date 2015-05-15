@@ -11,8 +11,8 @@ public class Checkers implements Runnable{
 
     public static void main(String[] args) {
         Thread thread = new Thread(new Checkers());
-        thread.start();
         controller = new Controller(thread);
+        thread.start();
     }
 
     public void run() {

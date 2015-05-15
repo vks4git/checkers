@@ -1,7 +1,9 @@
 package ru.ifmo.morozov.interfaces;
 
+import ru.ifmo.morozov.classes.Checker;
 import ru.ifmo.morozov.classes.Coordinates;
 import ru.ifmo.morozov.classes.model.Field;
+import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.enums.State;
 
 /**
@@ -9,8 +11,10 @@ import ru.ifmo.morozov.enums.State;
  */
 public interface Validator {
 
-    State isLegal(Field field, Coordinates move, Player player);
+    State verify(Checker[][] matrix, Coordinates move, Colour colour);
 
-    boolean canMove(Field field, Player player);
+    boolean canMove(Checker [][] matrix, Colour colour);
+
+    boolean isBeating(Checker[][] matrix, Coordinates move, Colour colour);
 
 }

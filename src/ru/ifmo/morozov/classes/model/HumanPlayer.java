@@ -1,5 +1,7 @@
 package ru.ifmo.morozov.classes.model;
 
+import ru.ifmo.morozov.classes.Checker;
+import ru.ifmo.morozov.classes.MoveSequence;
 import ru.ifmo.morozov.classes.Coordinates;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.interfaces.Player;
@@ -9,31 +11,27 @@ import ru.ifmo.morozov.interfaces.Player;
  */
 public class HumanPlayer implements Player {
 
-    private int direction;
     private Colour colour;
     private String name;
 
-    public HumanPlayer(Colour colour, String name, int direction) {
+    public HumanPlayer(Colour colour, String name) {
         this.colour = colour;
         this.name = name;
-        this.direction = direction;
     }
 
-    public Coordinates move(Field field, Pointer pointer) {
+    public MoveSequence move(Checker[][] matrix, Pointer pointer) {
         while (!pointer.isCompleted()) {
-            try {
-                Thread.sleep(1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            delay(1);
         }
-        Coordinates result = new Coordinates();
-        result.x1 = pointer.getCheckPosition().x;
-        result.y1 = pointer.getCheckPosition().y;
-        result.x2 = pointer.getReleasePosition().x;
-        result.y2 = pointer.getReleasePosition().y;
+        Coordinates move = new Coordinates();
+        move.x1 = pointer.getCheckPosition().x;
+        move.y1 = pointer.getCheckPosition().y;
+        move.x2 = pointer.getReleasePosition().x;
+        move.y2 = pointer.getReleasePosition().y;
         pointer.reset();
-        return result;
+        MoveSequence sequence = new MoveSequence();
+        sequence.add(move);
+        return sequence;
     }
 
     public Colour getColour() {
@@ -44,11 +42,15 @@ public class HumanPlayer implements Player {
         return name;
     }
 
-    public int getDirection() {
-        return direction;
-    }
-
     public boolean keyboardEntry() {
         return true;
+    }
+
+    private void delay(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package ru.ifmo.morozov.classes.model;
 
 import ru.ifmo.morozov.classes.Coordinates;
+import ru.ifmo.morozov.classes.MoveSequence;
 import ru.ifmo.morozov.enums.Colour;
 import ru.ifmo.morozov.enums.State;
 import ru.ifmo.morozov.interfaces.Listener;
@@ -29,39 +30,40 @@ public class Game implements Notifier {
 
     public Player start() {
         int i;
-        Coordinates move;
+        MoveSequence sequence;
         if (players[0].getColour() == Colour.White) {
             i = 0;
         } else {
             i = 1;
         }
 
-        State state;
-
+        State state = State.Illegal;
+        Colour colour;
         do {
-            if (rules.canMove(field, players[i % 2])) {
-                pointer.setTurn(players[i % 2].getColour());
-                field.setDirection(players[i % 2].getDirection());
+            colour = players[i % 2].getColour();
+            if (rules.canMove(field.getMatrix(), colour)) {
+                pointer.setTurn(colour);
 
                 if (players[i % 2].keyboardEntry()) {
                     pointer.usePointer();
                 }
+
                 do {
-                    do {
-                        move = players[i % 2].move(field, pointer);
-                        state = rules.isLegal(field, move, players[i % 2]);
-                    } while (state == State.Illegal);
-
-                    field.move(move.x1, move.y1, move.x2, move.y2);
-
-                    update();
+                    sequence = players[i % 2].move(field.getMatrix(), pointer);
+                    for (Coordinates move : sequence) {
+                        state = rules.verify(field.getMatrix(), move, colour);
+                        if (state != State.Illegal) {
+                            field.move(move);
+                            update();
+                        }
+                    }
                 } while (state != State.Legal);
+
             } else {
                 return players[(i + 1) % 2];
             }
             i++;
             pointer.doNotUsePointer();
-
 
         } while (true);
 
@@ -82,4 +84,5 @@ public class Game implements Notifier {
     public Pointer getPointer() {
         return pointer;
     }
+
 }

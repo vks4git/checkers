@@ -10,15 +10,21 @@ public class Checker {
 
     private Colour colour;
     private CheckerType type;
+    private int direction;
 
 
-    public Checker(Colour colour, CheckerType type) {
+    public Checker(Colour colour, CheckerType type, int direction) {
         this.colour = colour;
         this.type = type;
+        this.direction = direction;
     }
 
     public Colour getColour() {
         return colour;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 
     public CheckerType getType() {

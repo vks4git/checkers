@@ -16,8 +16,8 @@ import ru.ifmo.morozov.interfaces.Player;
 public class buf {
     public static void main(String[] args) {
         Rules validator = new Rules();
-        Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито", 1);
-        Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", -1, validator);
+        Player player1 = new HumanPlayer(Colour.White, "Дарт Херохито");
+        Player player2 = new AIPlayer(Colour.Black, "Злобный компьютерный разум", validator);
         Game game = new Game(player1, player2);
         Field field = game.getField();
 
@@ -27,7 +27,7 @@ public class buf {
         move.x2 = 3;
         move.y2 = 3;
 
-        System.out.println(validator.isLegal(field, move, player1));
+        System.out.println(validator.verify(field.getMatrix(), move, player1.getColour()));
 
         move.x1 = 7;
         move.y1 = 5;
@@ -35,7 +35,7 @@ public class buf {
         move.y2 = 4;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (!field.isFree(i, j)) {
+                if (field.getMatrix()[i][j] != null) {
                     if (field.getMatrix()[i][j].getColour() == player1.getColour()) {
                         field.free(i, j);
                     }
@@ -43,6 +43,6 @@ public class buf {
             }
         }
 
-        System.out.println(validator.canMove(field, player1));
+        System.out.println(validator.canMove(field.getMatrix(), player1.getColour()));
     }
 }
